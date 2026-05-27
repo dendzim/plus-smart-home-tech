@@ -31,9 +31,6 @@ public abstract class HubEvent {
     String hubId;
     Instant timestamp = Instant.now();
 
-    @NotBlank
-    String id;
-
     @NotNull
-    public abstract HubEventType getType();
+    public abstract HubEventType getEventType();
 }

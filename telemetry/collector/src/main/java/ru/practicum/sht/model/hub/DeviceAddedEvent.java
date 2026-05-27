@@ -15,10 +15,10 @@ public class DeviceAddedEvent extends HubEvent {
     private String id;
 
     @NotNull
-    private DeviceType type;
+    private DeviceType deviceType;
 
     @Override
-    public HubEventType getType() {
+    public HubEventType getEventType() {
         return HubEventType.DEVICE_ADDED;
     }
 }
