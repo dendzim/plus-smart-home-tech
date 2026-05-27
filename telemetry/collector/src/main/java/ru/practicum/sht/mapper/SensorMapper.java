@@ -1,9 +1,11 @@
 package ru.practicum.sht.mapper;
 
 import jakarta.validation.Valid;
+import org.springframework.stereotype.Component;
 import ru.practicum.sht.model.sensor.*;
 import ru.yandex.practicum.kafka.telemetry.event.*;
 
+@Component
 public class SensorMapper {
     public SensorEventAvro toAvro(@Valid SensorEvent sensorEvent) {
         if (sensorEvent == null) {

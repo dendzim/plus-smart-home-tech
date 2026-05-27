@@ -25,6 +25,7 @@ public class EventService {
     private final HubMapper hubMapper;
     private final SensorMapper sensorMapper;
     private final KafkaAvroProducer producer;
+
     public void addSensorEvent(@Valid SensorEvent sensorEvent) {
         SensorEventAvro sensorEventAvro = sensorMapper.toAvro(sensorEvent);
         producer.getProducer().send(new ProducerRecord<>(sensorsTopic, sensorEventAvro));

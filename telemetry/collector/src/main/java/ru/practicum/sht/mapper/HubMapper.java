@@ -1,12 +1,14 @@
 package ru.practicum.sht.mapper;
 
 import jakarta.validation.Valid;
+import org.springframework.stereotype.Component;
 import ru.practicum.sht.model.hub.*;
 import ru.yandex.practicum.kafka.telemetry.event.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class HubMapper {
     public HubEventAvro toAvro(@Valid HubEvent hubEvent) {
         HubEventAvro.Builder builder = HubEventAvro.newBuilder()
@@ -81,6 +83,7 @@ public class HubMapper {
             return null;
         }
         return ScenarioConditionAvro.newBuilder()
+                .setSensorId(condition.getSensorId())
                 .setType(toConditionTypeAvro(condition.getType()))
                 .setOperation(toConditionOperationAvro(condition.getOperation()))
                 .setValue(condition.getValue())
