@@ -16,9 +16,9 @@ public class KafkaAvroProducer {
     @Value("${sht.bootstrap}")
     private String bootstrapServer;
 
-    private Producer<Void, SpecificRecordBase> producer;
+    private Producer<String, SpecificRecordBase> producer;
 
-    public Producer<Void, SpecificRecordBase> getProducer() {
+    public Producer<String, SpecificRecordBase> getProducer() {
         if (producer == null) {
             initProducer();
         }
