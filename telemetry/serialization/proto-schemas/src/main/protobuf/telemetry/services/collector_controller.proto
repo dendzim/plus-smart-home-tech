@@ -1,0 +1,9 @@
+import "google/protobuf/empty.proto";
+
+service CollectorController {
+  rpc CollectSensorEvent (SensorEventProto)
+      returns (google.protobuf.Empty);
+
+  rpc CollectHubEvent (HubEventProto)
+      returns (google.protobuf.Empty);
+}
