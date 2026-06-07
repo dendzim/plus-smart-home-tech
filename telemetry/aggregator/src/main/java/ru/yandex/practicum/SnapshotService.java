@@ -28,8 +28,9 @@ public class SnapshotService {
 
         SensorStateAvro sensorStateAvro = sensorsSnapshotAvro.getSensorsState().get(event.getId());
 
-        if (sensorStateAvro != null && (sensorStateAvro.getTimestamp().isAfter(event.getTimestamp())) ||
-                Objects.equals(sensorStateAvro.getData(), event.getPayload()) ) {
+        if (sensorStateAvro != null &&
+                (sensorStateAvro.getTimestamp().isAfter(event.getTimestamp()) ||
+                        Objects.equals(sensorStateAvro.getData(), event.getPayload()))) {
             return Optional.empty();
         }
 
