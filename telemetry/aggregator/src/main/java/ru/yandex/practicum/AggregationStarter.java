@@ -84,16 +84,15 @@ public class AggregationStarter {
             log.error("Ошибка во время обработки событий от датчиков", e);
         } finally {
 
-            if (consumer != null) {
-                consumer.commitSync(currentOffsets);
-                consumer.close();
-            }
-
-            if (producer != null) {
+            try {
                 producer.flush();
+                consumer.commitSync();
+            } finally {
+                log.info("Закрываем консьюмер");
+                consumer.close();
+                log.info("Закрываем продюсер");
                 producer.close();
             }
-
         }
     }
 
