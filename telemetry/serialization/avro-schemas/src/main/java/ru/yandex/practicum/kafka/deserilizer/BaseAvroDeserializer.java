@@ -33,12 +33,11 @@ public class BaseAvroDeserializer<T extends SpecificRecordBase> implements Deser
         if (data == null) {
             return null;
         }
+
         try (ByteArrayInputStream is = new ByteArrayInputStream(data)) {
             BinaryDecoder decoder = decoderFactory.binaryDecoder(is, null);
             return reader.read(null, decoder);
-        } catch (IOException e) {
-            log.error("Ошибка десериализации данных Avro из топика: {}", topic, e);
-            throw new SerializationException("Ошибка десериализации данных Avro из топика: " + topic, e);
+
         } catch (Exception e) {
             log.error("Ошибка десериализации для топика: {}", topic, e);
             throw new SerializationException("Ошибка десериализации для топика: " + topic, e);

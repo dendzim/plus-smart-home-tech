@@ -19,18 +19,18 @@ public class SnapshotService {
 
         final SensorsSnapshotAvro sensorsSnapshotAvro = snapshots.computeIfAbsent(
                 event.getHubId(),
-                k -> SensorsSnapshotAvro.newBuilder()
+                key -> SensorsSnapshotAvro.newBuilder()
                         .setHubId(event.getHubId())
                         .setSensorsState(new ConcurrentHashMap<>())
                         .setTimestamp(event.getTimestamp())
                         .build()
         );
 
-        SensorStateAvro sensorStateAvro = sensorsSnapshotAvro.getSensorsState().get(event.getId());
+        SensorStateAvro oldState = sensorsSnapshotAvro.getSensorsState().get(event.getId());
 
-        if (sensorStateAvro != null &&
-                (sensorStateAvro.getTimestamp().isAfter(event.getTimestamp()) ||
-                        Objects.equals(sensorStateAvro.getData(), event.getPayload()))) {
+        if (oldState != null &&
+                (oldState.getTimestamp().isAfter(event.getTimestamp()) ||
+                        Objects.equals(oldState.getData(), event.getPayload()))) {
             return Optional.empty();
         }
 
