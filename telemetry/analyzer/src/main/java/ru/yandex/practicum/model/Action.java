@@ -3,8 +3,6 @@ package ru.yandex.practicum.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +20,4 @@ public class Action {
 
     private Integer value;
 
-    @OneToMany(mappedBy = "action")
-    private Set<ScenarioAction> scenarios;
 }

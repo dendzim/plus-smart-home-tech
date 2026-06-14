@@ -18,12 +18,5 @@ import java.util.Set;
 public class Sensor {
     @Id
     private String id;
-
     private String hubId;
-
-    @OneToMany(mappedBy = "sensor")
-    private Set<ScenarioCondition> conditions;
-
-    @OneToMany(mappedBy = "sensor")
-    private Set<ScenarioAction> actions;
 }

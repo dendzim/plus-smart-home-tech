@@ -11,18 +11,6 @@ import ru.yandex.practicum.processor.SnapshotProcessor;
 @ConfigurationPropertiesScan
 public class Analyzer {
     public static void main(String[] args) {
-        ConfigurableApplicationContext context =
-                SpringApplication.run(Analyzer.class, args);
-
-        final HubEventProcessor hubEventProcessor =
-                context.getBean(HubEventProcessor.class);
-        SnapshotProcessor snapshotProcessor =
-                context.getBean(SnapshotProcessor.class);
-
-        Thread hubEventsThread = new Thread(hubEventProcessor);
-        hubEventsThread.setName("HubEventHandlerThread");
-        hubEventsThread.start();
-
-        snapshotProcessor.start();
+        SpringApplication.run(Analyzer.class, args);
     }
 }

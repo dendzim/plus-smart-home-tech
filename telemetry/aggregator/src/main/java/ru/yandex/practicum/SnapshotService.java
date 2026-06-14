@@ -5,6 +5,7 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,9 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class SnapshotService {
 
-    private final Map<String, SensorsSnapshotAvro> snapshots = new ConcurrentHashMap<>();
+    private final Map<String, SensorsSnapshotAvro> snapshots = new HashMap<>();
 
-    Optional<SensorsSnapshotAvro> updateState(SensorEventAvro event) {
+    public Optional<SensorsSnapshotAvro> updateState(SensorEventAvro event) {
 
         final SensorsSnapshotAvro sensorsSnapshotAvro = snapshots.computeIfAbsent(
                 event.getHubId(),

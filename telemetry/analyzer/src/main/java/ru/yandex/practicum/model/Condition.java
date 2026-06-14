@@ -25,6 +25,4 @@ public class Condition {
 
     private Integer value;
 
-    @OneToMany(mappedBy = "condition")
-    private Set<ScenarioCondition> scenarios;
 }
