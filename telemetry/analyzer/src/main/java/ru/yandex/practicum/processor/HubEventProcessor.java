@@ -58,7 +58,7 @@ public class HubEventProcessor implements Runnable {
 
                 for (ConsumerRecord<String, HubEventAvro> record : records) {
                     try {
-                        analyzerService.handleRecord(record.value());
+                        analyzerService.handleHub(record.value());
                         currentOffsets.put(new TopicPartition(record.topic(), record.partition()),
                                 new OffsetAndMetadata(record.offset() + 1));
                     } catch (Exception e) {

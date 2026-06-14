@@ -3,7 +3,8 @@ package ru.yandex.practicum.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -20,9 +21,18 @@ public class Scenario {
     private String hubId;
     private String name;
 
-    @OneToMany(mappedBy = "scenario")
-    private Set<ScenarioCondition> conditions;
+    @OneToMany
+    @MapKeyColumn(table = "scenario_conditions", name = "sensor_id")
+    @JoinTable(name = "scenario_conditions",
+            joinColumns = @JoinColumn(name = "scenario_id"),
+            inverseJoinColumns = @JoinColumn(name = "condition_id"))
+    private Map<String, Condition> conditions = new HashMap<>();
 
-    @OneToMany(mappedBy = "scenario")
-    private Set<ScenarioAction> actions;
+    @OneToMany
+    @MapKeyColumn(table = "scenario_actions", name = "sensor_id")
+    @JoinTable(name = "scenario_actions",
+            joinColumns = @JoinColumn(name = "scenario_id"),
+            inverseJoinColumns = @JoinColumn(name = "action_id"))
+    private Map<String, Action> actions = new HashMap<>();
+
 }
