@@ -9,7 +9,6 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.VoidDeserializer;
 import org.apache.kafka.common.serialization.VoidSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,11 +19,7 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -39,9 +34,26 @@ public class AggregationStarter {
 
     private final KafkaConsumer<String, SensorEventAvro> consumer;
     private final KafkaProducer<String, SensorsSnapshotAvro> producer;
-    private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new ConcurrentHashMap<>();
+    private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
 
     private final SnapshotService snapshotService;
+
+    private Properties getProducerConfig(String bootstrapServer) {
+        Properties config = new Properties();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, VoidSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, EventAvroSerializer.class);
+        return config;
+    }
+
+    private Properties getConsumerConfig(String bootstrapServer) {
+        Properties config = new Properties();
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, "aggregator.id");
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, SensorEventDeserializer.class);
+        return config;
+    }
 
     @Autowired
     public AggregationStarter(SnapshotService snapshotService, @Value("${sht.bootstrap}") String bootstrapServer) {
@@ -95,22 +107,5 @@ public class AggregationStarter {
                 producer.close();
             }
         }
-    }
-
-    private Properties getProducerConfig(String bootstrapServer) {
-        Properties config = new Properties();
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, VoidSerializer.class);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, EventAvroSerializer.class);
-        return config;
-    }
-
-    private Properties getConsumerConfig(String bootstrapServer) {
-        Properties config = new Properties();
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "aggregator.id");
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
-        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, SensorEventDeserializer.class);
-        return config;
     }
 }
