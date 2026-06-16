@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class SnapshotService {
@@ -22,7 +21,7 @@ public class SnapshotService {
                 event.getHubId(),
                 key -> SensorsSnapshotAvro.newBuilder()
                         .setHubId(event.getHubId())
-                        .setSensorsState(new ConcurrentHashMap<>())
+                        .setSensorsState(new HashMap<>())
                         .setTimestamp(event.getTimestamp())
                         .build()
         );

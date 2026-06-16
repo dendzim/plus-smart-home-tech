@@ -17,8 +17,6 @@ import ru.yandex.practicum.repository.SensorRepository;
 
 import java.util.*;
 
-import static org.hibernate.engine.config.spi.StandardConverters.asInteger;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -55,6 +53,13 @@ public class AnalyzerService {
         String name = scenarioAddedEventAvro.getName();
         Scenario scenario = scenarioRepository.findByHubIdAndName(hubId, name)
                 .orElseGet(() -> Scenario.builder().hubId(hubId).name(name).build());
+
+        if (scenario.getConditions() == null) {
+            scenario.setConditions(new HashMap<>());
+        }
+        if (scenario.getActions() == null) {
+            scenario.setActions(new HashMap<>());
+        }
 
         scenario.setHubId(hubId);
         scenario.setName(name);
@@ -190,6 +195,23 @@ public class AnalyzerService {
             return Optional.of(c.getTemperatureC());
         }
         return Optional.empty();
+    }
+
+    private Integer asInteger(Object value) {
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof Boolean) {
+            return ((Boolean) value) ? 1 : 0;
+        }
+
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+
+        log.warn("Тип данных не распознан: {}", value.getClass().getSimpleName());
+        return null;
     }
 
     private boolean compareValues(Integer currentValue, Condition condition) {

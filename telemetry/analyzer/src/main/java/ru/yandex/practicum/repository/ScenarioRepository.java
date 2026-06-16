@@ -1,6 +1,8 @@
 package ru.yandex.practicum.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.model.Scenario;
 
@@ -14,5 +16,6 @@ public interface ScenarioRepository extends JpaRepository<Scenario, Long> {
 
     Optional<Scenario> findByHubIdAndName(String hubId, String name);
 
-    List<Scenario> findWithSensorsByHubId(String hubId);
+    @Query("SELECT s FROM Scenario s LEFT JOIN FETCH s.conditions LEFT JOIN FETCH s.actions WHERE s.hubId = :hubId")
+    List<Scenario> findWithSensorsByHubId(@Param("hubId") String hubId);
 }
