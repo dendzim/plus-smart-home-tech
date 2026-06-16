@@ -86,7 +86,7 @@ public class AnalyzerService {
                     .type(ActionType.valueOf(actionAvro.getType().name()))
                     .value(asInteger(actionAvro.getValue()))
                     .build();
-            scenario.getActions().put(sensorId, action);  // ← исправлено: добавлен sensorId
+            scenario.getActions().put(sensorId, action);
         });
 
         scenarioRepository.save(scenario);
