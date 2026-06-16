@@ -39,9 +39,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=ca
-      - POSTGRES_DB=sht
+      - POSTGRES_PASSWORD=
+      - POSTGRES_USER=denispanasuk
+      - POSTGRES_DB=postgres
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s

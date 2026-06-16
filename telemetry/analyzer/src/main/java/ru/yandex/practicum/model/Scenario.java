@@ -21,14 +21,14 @@ public class Scenario {
     private String hubId;
     private String name;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @MapKeyColumn(table = "scenario_conditions", name = "sensor_id")
     @JoinTable(name = "scenario_conditions",
             joinColumns = @JoinColumn(name = "scenario_id"),
             inverseJoinColumns = @JoinColumn(name = "condition_id"))
     private Map<String, Condition> conditions = new HashMap<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @MapKeyColumn(table = "scenario_actions", name = "sensor_id")
     @JoinTable(name = "scenario_actions",
             joinColumns = @JoinColumn(name = "scenario_id"),
