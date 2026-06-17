@@ -21,17 +21,21 @@ public class HubEventProcessor implements Runnable {
 
     @Value("${sht.telemetry.hubs.topic}")
     private String hubsTopic;
-    private static final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
+
+    @Value("${sht.consumer.poll.timeout:1000}")
+    private long pollTimeoutMs;
+    private Duration CONSUME_ATTEMPT_TIMEOUT;
     private final AnalyzerService analyzerService;
     private final KafkaConsumer<String, HubEventAvro> consumer;
     private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
 
-
     @Autowired
     public HubEventProcessor(AnalyzerService analyzerService,
-                             @Value("${sht.bootstrap}") String bootstrapServer) {
+                             @Value("${sht.bootstrap}") String bootstrapServer,
+                             @Value("${sht.consumer.poll.timeout:1000}") long pollTimeoutMs) {
         this.analyzerService = analyzerService;
         this.consumer = new KafkaConsumer<>(getConsumerConfig(bootstrapServer));
+        this.CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(pollTimeoutMs);
         Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
     }
 
@@ -41,6 +45,7 @@ public class HubEventProcessor implements Runnable {
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, HubEventDeserializer.class);
+        config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         return config;
     }
 

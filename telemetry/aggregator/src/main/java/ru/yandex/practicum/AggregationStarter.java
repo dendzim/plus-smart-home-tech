@@ -29,8 +29,9 @@ public class AggregationStarter {
     private String sensorsTopic;
     @Value("${sht.telemetry.snapshots.topic}")
     private String snapshotsTopic;
-
-    private static final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
+    @Value("${sht.consumer.poll.timeout:1000}")
+    private long pollTimeoutMs;
+    private Duration CONSUME_ATTEMPT_TIMEOUT;
 
     private final KafkaConsumer<String, SensorEventAvro> consumer;
     private final KafkaProducer<String, SensorsSnapshotAvro> producer;
@@ -52,14 +53,17 @@ public class AggregationStarter {
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, SensorEventDeserializer.class);
+        config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         return config;
     }
 
     @Autowired
-    public AggregationStarter(SnapshotService snapshotService, @Value("${sht.bootstrap}") String bootstrapServer) {
+    public AggregationStarter(SnapshotService snapshotService, @Value("${sht.bootstrap}") String bootstrapServer,
+                              @Value("${sht.consumer.poll.timeout:1000}") long pollTimeoutMs) {
         this.snapshotService = snapshotService;
         this.consumer = new KafkaConsumer<>(getConsumerConfig(bootstrapServer));
         this.producer = new KafkaProducer<>(getProducerConfig(bootstrapServer));
+        this.CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(pollTimeoutMs);
 
         Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
     }

@@ -24,16 +24,21 @@ public class SnapshotProcessor {
 
     @Value("${sht.telemetry.snapshots.topic}")
     private String snapshotsTopic;
-    private static final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
+
+    @Value("${sht.consumer.poll.timeout:1000}")
+    private long pollTimeoutMs;
+    private Duration CONSUME_ATTEMPT_TIMEOUT;
 
     private final AnalyzerService analyzerService;
     private final KafkaConsumer<String, SensorsSnapshotAvro> consumer;
 
     @Autowired
     public SnapshotProcessor(AnalyzerService analyzerService,
-                             @Value("${sht.bootstrap}") String bootstrapServer) {
+                             @Value("${sht.bootstrap}") String bootstrapServer,
+                             @Value("${sht.consumer.poll.timeout:1000}") long pollTimeoutMs) {
         this.analyzerService = analyzerService;
         this.consumer = new KafkaConsumer<>(getConsumerConfig(bootstrapServer));
+        this.CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(pollTimeoutMs);
         Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
     }
 
@@ -43,6 +48,7 @@ public class SnapshotProcessor {
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, VoidDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, SensorsSnapshotDeserializer.class);
+        config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         return config;
     }
 
