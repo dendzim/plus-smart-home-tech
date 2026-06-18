@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class DeviceRemovedEventHandler implements HubEventHandler {
 
-    @Value("${sht.telemetry.hubs.topic}")
+    @Value("${collector.kafka.topic.hubs}")
     private String hubsTopic;
 
     protected final KafkaProducer client;

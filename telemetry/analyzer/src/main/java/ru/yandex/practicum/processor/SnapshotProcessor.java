@@ -22,10 +22,10 @@ import java.util.Properties;
 @Component
 public class SnapshotProcessor {
 
-    @Value("${sht.telemetry.snapshots.topic}")
+    @Value("${analyzer.kafka.topic.snapshots}")
     private String snapshotsTopic;
 
-    @Value("${sht.consumer.poll.timeout:1000}")
+    @Value("${analyzer.kafka.poll.timeout}")
     private long pollTimeoutMs;
     private Duration CONSUME_ATTEMPT_TIMEOUT;
 
@@ -34,8 +34,8 @@ public class SnapshotProcessor {
 
     @Autowired
     public SnapshotProcessor(AnalyzerService analyzerService,
-                             @Value("${sht.bootstrap}") String bootstrapServer,
-                             @Value("${sht.consumer.poll.timeout:1000}") long pollTimeoutMs) {
+                             @Value("${analyzer.kafka.bootstrap}") String bootstrapServer,
+                             @Value("${analyzer.kafka.poll.timeout}") long pollTimeoutMs) {
         this.analyzerService = analyzerService;
         this.consumer = new KafkaConsumer<>(getConsumerConfig(bootstrapServer));
         this.CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(pollTimeoutMs);

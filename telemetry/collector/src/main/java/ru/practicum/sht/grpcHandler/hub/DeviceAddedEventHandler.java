@@ -6,6 +6,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import ru.practicum.sht.kafka.KafkaProducer;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceAddedEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
@@ -21,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class DeviceAddedEventHandler implements HubEventHandler {
 
-    @Value("${sht.telemetry.hubs.topic}")
+    @Value("${collector.kafka.topic.hubs}")
     private String hubsTopic;
 
     protected final KafkaProducer client;

@@ -25,11 +25,11 @@ import java.util.*;
 @Component
 @RequiredArgsConstructor
 public class AggregationStarter {
-    @Value("${sht.telemetry.sensors.topic}")
+    @Value("${aggregator.kafka.topic.sensors}")
     private String sensorsTopic;
-    @Value("${sht.telemetry.snapshots.topic}")
+    @Value("${aggregator.kafka.topic.snapshots}")
     private String snapshotsTopic;
-    @Value("${sht.consumer.poll.timeout:1000}")
+    @Value("${aggregator.kafka.poll.timeout}")
     private long pollTimeoutMs;
     private Duration CONSUME_ATTEMPT_TIMEOUT;
 
@@ -58,8 +58,8 @@ public class AggregationStarter {
     }
 
     @Autowired
-    public AggregationStarter(SnapshotService snapshotService, @Value("${sht.bootstrap}") String bootstrapServer,
-                              @Value("${sht.consumer.poll.timeout:1000}") long pollTimeoutMs) {
+    public AggregationStarter(SnapshotService snapshotService, @Value("${aggregator.kafka.bootstrap}") String bootstrapServer,
+                              @Value("${aggregator.kafka.poll.timeout}") long pollTimeoutMs) {
         this.snapshotService = snapshotService;
         this.consumer = new KafkaConsumer<>(getConsumerConfig(bootstrapServer));
         this.producer = new KafkaProducer<>(getProducerConfig(bootstrapServer));

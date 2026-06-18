@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Component
 public class ScenarioAddedEventHandler implements HubEventHandler {
 
-    @Value("${sht.telemetry.hubs.topic}")
+    @Value("${collector.kafka.topic.hubs}")
     private String hubsTopic;
 
     protected final KafkaProducer client;

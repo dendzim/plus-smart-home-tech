@@ -13,7 +13,7 @@ import java.util.Properties;
 @Component
 public class KafkaProducer {
 
-    @Value("${sht.bootstrap}")
+    @Value("${collector.kafka.bootstrap}")
     private String bootstrapServer;
 
     private Producer<String, SpecificRecordBase> producer;
