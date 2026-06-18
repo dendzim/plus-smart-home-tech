@@ -1,0 +1,115 @@
+package ru.yandex.practicum;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.*;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.errors.WakeupException;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.VoidSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.kafka.deserilizer.SensorEventDeserializer;
+import ru.yandex.practicum.kafka.EventAvroSerializer;
+import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
+import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
+
+import java.time.Duration;
+import java.util.*;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class AggregationStarter {
+    @Value("${sht.telemetry.sensors.topic}")
+    private String sensorsTopic;
+    @Value("${sht.telemetry.snapshots.topic}")
+    private String snapshotsTopic;
+    @Value("${sht.consumer.poll.timeout:1000}")
+    private long pollTimeoutMs;
+    private Duration CONSUME_ATTEMPT_TIMEOUT;
+
+    private final KafkaConsumer<String, SensorEventAvro> consumer;
+    private final KafkaProducer<String, SensorsSnapshotAvro> producer;
+    private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
+
+    private final SnapshotService snapshotService;
+
+    private Properties getProducerConfig(String bootstrapServer) {
+        Properties config = new Properties();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, VoidSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, EventAvroSerializer.class);
+        return config;
+    }
+
+    private Properties getConsumerConfig(String bootstrapServer) {
+        Properties config = new Properties();
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, "aggregator.id");
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, SensorEventDeserializer.class);
+        config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+        return config;
+    }
+
+    @Autowired
+    public AggregationStarter(SnapshotService snapshotService, @Value("${sht.bootstrap}") String bootstrapServer,
+                              @Value("${sht.consumer.poll.timeout:1000}") long pollTimeoutMs) {
+        this.snapshotService = snapshotService;
+        this.consumer = new KafkaConsumer<>(getConsumerConfig(bootstrapServer));
+        this.producer = new KafkaProducer<>(getProducerConfig(bootstrapServer));
+        this.CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(pollTimeoutMs);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
+    }
+
+    public void start() {
+        try {
+            consumer.subscribe(List.of(sensorsTopic));
+
+            while (true) {
+                ConsumerRecords<String, SensorEventAvro> consumerRecords = consumer.poll(CONSUME_ATTEMPT_TIMEOUT);
+
+                if (!consumerRecords.isEmpty()) {
+                    for (ConsumerRecord<String, SensorEventAvro> record : consumerRecords) {
+                        Optional<SensorsSnapshotAvro> optional = snapshotService.updateState(record.value());
+                        optional.ifPresent(sensorsSnapshotAvro ->
+                                this.producer.send(new ProducerRecord<>(snapshotsTopic, sensorsSnapshotAvro)));
+
+                        currentOffsets.put(new TopicPartition(record.topic(), record.partition()),
+                                new OffsetAndMetadata(record.offset() + 1));
+                    }
+
+                    producer.flush();
+
+                    consumer.commitAsync(currentOffsets, (offsets, exception) -> {
+                        if (exception != null) {
+                            log.warn("Ошибка во время фиксации оффсетов: {}", offsets, exception);
+                        }
+                    });
+                }
+            }
+
+        } catch (WakeupException ignored) {
+
+        } catch (Exception e) {
+            log.error("Ошибка во время обработки событий от датчиков", e);
+        } finally {
+
+            try {
+                producer.flush();
+                consumer.commitSync();
+            } finally {
+                log.info("Закрываем консьюмер");
+                consumer.close();
+                log.info("Закрываем продюсер");
+                producer.close();
+            }
+        }
+    }
+}

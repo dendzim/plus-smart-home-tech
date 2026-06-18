@@ -7,7 +7,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.practicum.sht.kafka.KafkaAvroProducer;
+import ru.practicum.sht.kafka.KafkaProducer;
 import ru.practicum.sht.mapper.HubMapper;
 import ru.practicum.sht.mapper.SensorMapper;
 import ru.practicum.sht.model.hub.HubEvent;
@@ -29,7 +29,7 @@ public class EventService {
 
     private final HubMapper hubMapper;
     private final SensorMapper sensorMapper;
-    private final KafkaAvroProducer producer;
+    private final KafkaProducer producer;
 
     public void addSensorEvent(@Valid SensorEvent sensorEvent) {
         SensorEventAvro sensorEventAvro = sensorMapper.toAvro(sensorEvent);
