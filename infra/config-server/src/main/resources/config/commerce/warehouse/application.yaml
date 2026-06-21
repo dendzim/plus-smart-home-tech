@@ -1,0 +1,16 @@
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  datasource:
+    driverClassName: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:5432/postgres?currentSchema=warehouse"
+    username: "denispanasuk"
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
