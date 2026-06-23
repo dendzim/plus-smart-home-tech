@@ -40,7 +40,7 @@ public class ShoppingCartController implements CartClient {
     }
 
     @Override
-    public ShoppingCartDto removeProductsFromCart(String username, List<UUID> productsId) {
-        return service.removeProductsFromCart(username, productsId);
+    public ShoppingCartDto removeProductsFromCart(String username, List<UUID> products) {
+        return service.removeProductsFromCart(username, products);
     }
 }

@@ -7,19 +7,14 @@ import ru.yandex.practicum.model.ShoppingCart;
 @Component
 public class ShoppingCartMapper {
 
-    public ShoppingCart toShoppingCart(ShoppingCartDto shoppingCartDto) {
-        if (shoppingCartDto == null) {
-            return null;
-        }
-
-        return ShoppingCart.builder().build();
-    }
-
     public ShoppingCartDto toShoppingCartDto(ShoppingCart shoppingCart) {
         if (shoppingCart == null) {
             return null;
         }
 
-        return ShoppingCartDto.builder().build();
+        return ShoppingCartDto.builder()
+                .shoppingCartId(shoppingCart.getShoppingCartId())
+                .products(shoppingCart.getProducts())
+                .build();
     }
 }
