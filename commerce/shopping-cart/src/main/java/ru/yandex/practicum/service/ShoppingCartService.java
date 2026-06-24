@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.cart.dto.ChangeProductQuantityRequest;
 import ru.yandex.practicum.cart.dto.ShoppingCartDto;
+import ru.yandex.practicum.exception.NoProductsInShoppingCartException;
 import ru.yandex.practicum.mapper.ShoppingCartMapper;
 import ru.yandex.practicum.model.ShoppingCart;
 import ru.yandex.practicum.repository.ShoppingCartRepository;
+import ru.yandex.practicum.warehouse.feignClient.WareHouseClient;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,7 @@ public class ShoppingCartService {
 
     private final ShoppingCartRepository cartRepository;
     private final ShoppingCartMapper cartMapper;
+    private final WareHouseClient wareHouseClient;
 
     public ShoppingCartDto addProduct(String username, Map<UUID, Integer> products) {
         ShoppingCart shoppingCart = getOrCreate(username);
@@ -39,7 +42,20 @@ public class ShoppingCartService {
     }
 
     public ShoppingCartDto changeQuantity(String username, ChangeProductQuantityRequest request) {
-        return null;
+        ShoppingCart shoppingCart = getOrCreate(username);
+        UUID productId = request.getProductId();
+
+        Integer newQuantity = request.getNewQuantity();
+
+        if (!shoppingCart.getProducts().containsKey(productId)) {
+            throw new NoProductsInShoppingCartException(productId);
+        }
+        wareHouseClient.checkQuantity(new ShoppingCartDto(shoppingCart.getShoppingCartId(),
+                Map.of(productId, newQuantity)));
+
+        shoppingCart.getProducts().put(productId, newQuantity);
+        cartRepository.save(shoppingCart);
+        return cartMapper.toShoppingCartDto(shoppingCart);
     }
 
     public void deactivateCart(String username) {

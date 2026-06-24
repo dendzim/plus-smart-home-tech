@@ -11,12 +11,12 @@ import ru.yandex.practicum.warehouse.dto.AddProductToWarehouseRequest;
 import ru.yandex.practicum.warehouse.dto.AddressDto;
 import ru.yandex.practicum.warehouse.dto.BookedProductsDto;
 import ru.yandex.practicum.warehouse.dto.NewProductInWarehouseRequest;
-import ru.yandex.practicum.warehouse.feignClient.WareHouseClinet;
+import ru.yandex.practicum.warehouse.feignClient.WareHouseClient;
 
 @RestController
 @RequestMapping("/api/v1/warehouse")
 @RequiredArgsConstructor
-public class StorageController implements WareHouseClinet {
+public class StorageController implements WareHouseClient {
 
     private final StorageService service;
 
