@@ -3,10 +3,7 @@ package ru.yandex.practicum.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -15,7 +12,8 @@ import java.util.UUID;
 @Entity
 @Builder
 @Table(name = "products", schema = "warehouse")
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class StorageProduct {
 
     @Id
