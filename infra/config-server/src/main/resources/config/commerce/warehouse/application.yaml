@@ -5,9 +5,9 @@ spring:
     ansi:
       enabled: ALWAYS
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=warehouse
-    username: "denispanasuk"
-    password: "password"
+    url: jdbc:postgresql://localhost:5432/test?currentSchema=warehouse
+    username: ${DB_USERNAME:denispanasuk}
+    password: ${DB_PASSWORD:password}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
