@@ -11,7 +11,7 @@ import ru.yandex.practicum.store.dto.ProductDto;
 import ru.yandex.practicum.store.enums.QuantityState;
 import ru.yandex.practicum.store.feignClient.StoreClient;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 @RestController

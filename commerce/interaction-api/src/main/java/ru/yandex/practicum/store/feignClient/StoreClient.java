@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.store.dto.ProductDto;
 import ru.yandex.practicum.store.enums.ProductCategory;
 import ru.yandex.practicum.store.enums.QuantityState;
+import org.springframework.data.domain.Pageable;
 
-import java.awt.print.Pageable;
 import java.util.UUID;
 
 @FeignClient(name = "shopping-store", path = "/api/v1/shopping-store")
