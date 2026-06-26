@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=warehouse
     username: "denispanasuk"
-    password: ""
+    password: "password"
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
