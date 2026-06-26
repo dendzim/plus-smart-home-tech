@@ -3,10 +3,6 @@ spring:
     name: collector
   config:
     import: "configserver:"
-    fail-fast: true
-    retry:
-      useRandomPolicy: true
-      max-interval: 6000
   cloud:
     config:
       discovery:
