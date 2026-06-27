@@ -6,6 +6,7 @@ import ru.yandex.practicum.store.enums.ProductCategory;
 import ru.yandex.practicum.store.enums.ProductState;
 import ru.yandex.practicum.store.enums.QuantityState;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -14,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "products", schema = "store")
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -40,6 +41,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductCategory productCategory;
 
-    @Column(nullable = false)
-    private Double price;
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal price;
 }

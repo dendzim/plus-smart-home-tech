@@ -48,3 +48,52 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+
+  store-db:
+    image: postgres:16.1
+    container_name: store-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: store_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  cart_db:
+    image: postgres:16.1
+    container_name: cart_db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: cart_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  warehouse_db:
+    image: postgres:16.1
+    container_name: warehouse_db
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_DB: warehouse_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
