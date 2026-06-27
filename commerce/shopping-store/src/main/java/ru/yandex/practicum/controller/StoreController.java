@@ -17,7 +17,6 @@ import ru.yandex.practicum.store.feignClient.StoreClient;
 
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -38,7 +37,7 @@ public class StoreController implements StoreClient {
     }
 
     @Override
-    public Page<ProductDto> getProductsByCategory(ProductCategory category, int page, int size, List<String> sort) {
+    public Page<ProductDto> getProductsByCategory(ProductCategory category, int page, int size, String sort) {
         Sort sortObj = parseSortParams(sort);
         Pageable pageable = PageRequest.of(page, size, sortObj);
 
@@ -61,20 +60,18 @@ public class StoreController implements StoreClient {
         return service.removeProductFromStore(productId);
     }
 
-    private Sort parseSortParams(List<String> sortParams) {
+    private Sort parseSortParams(String sortParams) {
         if (sortParams == null || sortParams.isEmpty()) {
             return Sort.unsorted();
         }
 
+        String[] parts = sortParams.split(",");
+        String property = parts[0].trim();
         Sort sort = Sort.unsorted();
-        for (String sortParam : sortParams) {
-            String[] parts = sortParam.split(",");
-            String property = parts[0].trim();
-            Sort.Direction direction = parts.length > 1 && parts[1].trim().equalsIgnoreCase("desc")
-                    ? Sort.Direction.DESC
-                    : Sort.Direction.ASC;
-            sort = sort.and(Sort.by(direction, property));
-        }
+        Sort.Direction direction = parts.length > 1 && parts[1].trim().equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+        sort = sort.and(Sort.by(direction, property));
         return sort;
     }
 }

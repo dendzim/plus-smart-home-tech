@@ -10,7 +10,6 @@ import ru.yandex.practicum.store.dto.ProductDto;
 import ru.yandex.practicum.store.enums.ProductCategory;
 import ru.yandex.practicum.store.enums.QuantityState;
 
-import java.util.List;
 import java.util.UUID;
 
 @FeignClient(name = "shopping-store", path = "/api/v1/shopping-store")
@@ -27,7 +26,7 @@ public interface StoreClient {
             @RequestParam("category") ProductCategory category,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size,
-            @RequestParam(value = "sort", required = false) List<String> sort);
+            @RequestParam(value = "sort", required = false) String sort);
 
     @PostMapping
     ProductDto updateProduct(@RequestBody @Valid ProductDto productDto) throws FeignException;
