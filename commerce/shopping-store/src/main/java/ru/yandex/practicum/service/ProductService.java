@@ -26,7 +26,6 @@ public class ProductService {
 
     public ProductDto addProduct(ProductDto productDto) {
         Product product = productMapper.toProduct(productDto);
-        product.setProductState(ProductState.ACTIVE);
         Product savedProduct = productRepository.save(product);
         return productMapper.toProductDto(savedProduct);
     }
