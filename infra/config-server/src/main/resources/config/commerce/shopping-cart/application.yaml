@@ -6,7 +6,7 @@ spring:
       enabled: ALWAYS
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=cart
-    username: ${DB_USERNAME:denispanasuk}
+    username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:password}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
