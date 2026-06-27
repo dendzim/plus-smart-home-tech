@@ -4,18 +4,14 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
-  datasource:
-    url: jdbc:postgresql://localhost:5433/store_db
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:password}
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath:schema.sql
+      ddl-auto: create-drop
+    datasource:
+      url: jdbc:postgresql://localhost:5432/store
+      username: postgres
+      password: password
+      driver-class-name: org.postgresql.Driver
 eureka:
   instance:
     hostname: localhost
