@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.service.ProductService;
 
+import ru.yandex.practicum.store.StoreOperations;
 import ru.yandex.practicum.store.dto.ProductDto;
 import ru.yandex.practicum.store.enums.ProductCategory;
 import ru.yandex.practicum.store.enums.QuantityState;
-import ru.yandex.practicum.store.feignClient.StoreClient;
 
 import org.springframework.data.domain.Pageable;
 
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/shopping-store")
 @RequiredArgsConstructor
-public class StoreController implements StoreClient {
+public class StoreController implements StoreOperations {
 
     private final ProductService service;
 

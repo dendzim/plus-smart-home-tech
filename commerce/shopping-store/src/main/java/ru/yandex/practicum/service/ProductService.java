@@ -49,7 +49,7 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
 
-        productMapper.update(product, productDto);
+        productMapper.merge(product, productDto);
 
         return productMapper.toProductDto(product);
     }
