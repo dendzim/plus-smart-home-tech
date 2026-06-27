@@ -3,9 +3,7 @@ package ru.yandex.practicum.store.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import ru.yandex.practicum.store.enums.ProductCategory;
 import ru.yandex.practicum.store.enums.ProductState;
 import ru.yandex.practicum.store.enums.QuantityState;
@@ -15,6 +13,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDto {
     private UUID productId;
 

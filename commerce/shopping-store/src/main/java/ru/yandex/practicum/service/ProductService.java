@@ -2,6 +2,7 @@ package ru.yandex.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.exception.ProductNotFoundException;
@@ -12,7 +13,6 @@ import ru.yandex.practicum.store.dto.ProductDto;
 import ru.yandex.practicum.store.enums.ProductCategory;
 import ru.yandex.practicum.store.enums.ProductState;
 import ru.yandex.practicum.store.enums.QuantityState;
-import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
 
@@ -27,7 +27,6 @@ public class ProductService {
     public ProductDto addProduct(ProductDto productDto) {
         Product product = productMapper.toProduct(productDto);
         product.setProductState(ProductState.ACTIVE);
-        product.setQuantityState(QuantityState.ENOUGH);
         Product savedProduct = productRepository.save(product);
         return productMapper.toProductDto(savedProduct);
     }
