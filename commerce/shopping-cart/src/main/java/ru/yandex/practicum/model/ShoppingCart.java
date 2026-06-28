@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Entity
-@Table(name = "shopping_carts")
+@Table(name = "shopping_carts", schema = "cart")
 @Getter
 @Setter
 @Builder
@@ -23,7 +23,7 @@ public class ShoppingCart {
     private String username;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "shopping_cart_items",
+    @CollectionTable(name = "shopping_cart_items", schema = "cart",
             joinColumns = @JoinColumn(name = "shopping_cart_id"))
     @MapKeyColumn(name = "product_id")
     @Column(name = "quantity")

@@ -1,17 +1,24 @@
 server:
   port: 8084
+
 spring:
   output:
     ansi:
       enabled: ALWAYS
+  datasource:
+    url: jdbc:postgresql://localhost:5432/warehouse
+    username: postgres
+    password: password
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create-drop
-    datasource:
-      url: jdbc:postgresql://localhost:5432/warehouse
-      username: postgres
-      password: password
-      driver-class-name: org.postgresql.Driver
+      ddl-auto: none
+    sql:
+      init:
+        mode: always
+        schema-locations: classpath:schema.sql
+
+
 eureka:
   instance:
     hostname: localhost
