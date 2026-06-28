@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Builder
-@Table(name = "products", schema = "warehouse")
+@Table(name = "products")
 @NoArgsConstructor
 @AllArgsConstructor
 public class StorageProduct {
