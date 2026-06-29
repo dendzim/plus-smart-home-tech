@@ -6,7 +6,7 @@ spring:
     ansi:
       enabled: ALWAYS
   datasource:
-    url: jdbc:postgresql://localhost:5432/warehouse
+    url: jdbc:postgresql://postgres:5432/warehouse
     username: postgres
     password: password
   jpa:
