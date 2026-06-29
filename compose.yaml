@@ -33,17 +33,38 @@ services:
                              --partitions 1 --replication-factor 1 --if-not-exists \
                              --bootstrap-server kafka:29092'"
     init: true
-  db:
+  postgres:
     image: postgres:16.1
     container_name: postgres
-    ports:
-      - "5432:5432"
+    hostname: postgres
     environment:
-      - POSTGRES_PASSWORD=
-      - POSTGRES_USER=denispanasuk
-      - POSTGRES_DB=postgres
+      POSTGRES_DB: telemetry_analyzer
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s
       interval: 5s
       retries: 10
+    ports:
+      - "5432:5432"
+  db-init:
+    image: postgres:16.1
+    container_name: db-init
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint:
+      - bash
+      - -c
+      - |
+        set -e
+        psql postgresql://postgres:password@postgres:5432 -v ON_ERROR_STOP=1 <<-EOSQL
+        create database cart;
+        create database store;
+        create database warehouse;
+        create database order;
+        create database delivery;
+        create database payment;
+        EOSQL
+

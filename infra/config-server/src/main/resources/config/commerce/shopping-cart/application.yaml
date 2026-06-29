@@ -1,0 +1,23 @@
+server:
+  port: 8082
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cart
+    username: postgres
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+eureka:
+  instance:
+    hostname: localhost
+    preferIpAddress: false
+    instance-id: shopping-cart:${random.value}
