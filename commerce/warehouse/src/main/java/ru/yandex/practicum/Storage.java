@@ -10,6 +10,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 public class Storage {
     public static void main(String[] args) {
-        SpringApplication.run(Storage.class);
+        SpringApplication.run(Storage.class, args);
     }
 }
