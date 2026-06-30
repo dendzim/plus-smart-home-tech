@@ -26,8 +26,4 @@ public class OrderDto {
     private BigDecimal totalPrice;
     private BigDecimal deliveryPrice;
     private BigDecimal productPrice;
-
-
-
-
 }

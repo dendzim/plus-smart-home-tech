@@ -27,56 +27,56 @@ public class OrderController implements OrderOperations {
 
     @Override
     public OrderDto addOrder(CreateNewOrderRequest request) throws FeignException {
-        return service.adOrder(request);
+        return service.addOrder(request);
     }
 
     @Override
     public OrderDto returnOrder(ProductReturnRequest request) throws FeignException {
-        return null;
+        return service.returnOrder(request);
     }
 
     @Override
     public OrderDto paymentOrder(UUID orderId) throws FeignException {
-        return null;
+        return service.paymentOrder(orderId);
     }
 
     @Override
     public OrderDto failPaymentOrder(UUID orderId) throws FeignException {
-        return null;
+        return service.failPaymentOrder(orderId);
     }
 
     @Override
     public OrderDto deliveryOrder(UUID orderId) throws FeignException {
-        return null;
+        return service.deliveryOrder(orderId);
     }
 
     @Override
     public OrderDto failDeliveryOrder(UUID orderId) throws FeignException {
-        return null;
+        return service.failDeliveryOrder(orderId);
     }
 
     @Override
     public OrderDto completeOrder(UUID orderId) throws FeignException {
-        return null;
+        return service.completeOrder(orderId);
     }
 
     @Override
     public OrderDto calculateTotalOrder(UUID orderId) throws FeignException {
-        return null;
+        return service.calculateTotalOrder(orderId);
     }
 
     @Override
     public OrderDto calculateDeliveryOrder(UUID orderId) throws FeignException {
-        return null;
+        return service.calculateDeliveryOrder(orderId);
     }
 
     @Override
     public OrderDto assemblyOrder(UUID orderId) throws FeignException {
-        return null;
+        return service.assemblyOrder(orderId);
     }
 
     @Override
     public OrderDto failAssemblyOrder(UUID orderId) throws FeignException {
-        return null;
+        return service.failAssemblyOrder(orderId);
     }
 }
