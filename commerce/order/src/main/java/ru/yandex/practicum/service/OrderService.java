@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.mapper.OrderMapper;
+import ru.yandex.practicum.order.dto.CreateNewOrderRequest;
 import ru.yandex.practicum.order.dto.OrderDto;
 import ru.yandex.practicum.repository.OrderRepository;
 
@@ -22,5 +23,9 @@ public class OrderService {
         return orderRepository.findAllByUsername(username).stream()
                 .map(orderMapper::toOrderDto)
                 .toList();
+    }
+
+    public OrderDto adOrder(CreateNewOrderRequest request) {
+        return null;
     }
 }
