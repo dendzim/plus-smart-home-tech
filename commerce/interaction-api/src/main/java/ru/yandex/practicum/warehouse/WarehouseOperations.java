@@ -24,5 +24,5 @@ public interface WarehouseOperations {
     void addProduct(@RequestBody @Valid AddProductToWarehouseRequest request) throws FeignException;
 
     @GetMapping("/address")
-    AddressDto getAddress();
+    AddressDto getAddress() throws FeignException;
 }

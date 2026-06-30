@@ -1,4 +1,4 @@
-package ru.yandex.practicum.exception;
+package ru.yandex.practicum.exceptions;
 
 import java.util.UUID;
 
@@ -8,6 +8,6 @@ public class NoProductsInShoppingCartException extends RuntimeException {
     }
 
     public NoProductsInShoppingCartException(UUID uuid) {
-        super("Товара с id " + uuid + " нет в корзине");
+        super("Товара с id " + uuid + " в корзине нет");
     }
 }

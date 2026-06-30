@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.cart.dto.ShoppingCartDto;
-import ru.yandex.practicum.exception.NoSpecifiedProductInWarehouseException;
-import ru.yandex.practicum.exception.ValidationException;
+
+import ru.yandex.practicum.exceptions.NoSpecificProductInWarehouseException;
+import ru.yandex.practicum.exceptions.ValidationException;
 import ru.yandex.practicum.mapper.StorageMapper;
 import ru.yandex.practicum.model.StorageProduct;
 import ru.yandex.practicum.repository.StorageRepository;
@@ -63,7 +64,7 @@ public class StorageService {
             StorageProduct storageProduct = productsById.get(productId);
 
             if (storageProduct == null) {
-                throw new NoSpecifiedProductInWarehouseException(productId);
+                throw new NoSpecificProductInWarehouseException(productId);
             }
 
             if (storageProduct.getQuantity() < quantity) {
@@ -83,7 +84,7 @@ public class StorageService {
 
     public void addProduct(AddProductToWarehouseRequest request) {
         StorageProduct storageProduct = storageRepository.findById(request.getProductId())
-                .orElseThrow(() -> new NoSpecifiedProductInWarehouseException(request.getProductId()));
+                .orElseThrow(() -> new NoSpecificProductInWarehouseException(request.getProductId()));
 
         storageProduct.setQuantity(storageProduct.getQuantity() + request.getQuantity());
         storageRepository.save(storageProduct);
