@@ -17,10 +17,10 @@ public interface PaymentOperations {
     PaymentDto createPayment(@RequestBody @Valid OrderDto request) throws FeignException;
 
     @PostMapping("/totalCost")
-    BigDecimal totalCost(@RequestBody @Valid OrderDto request) throws FeignException;
+    BigDecimal getTotalCost(@RequestBody @Valid OrderDto request) throws FeignException;
 
     @PostMapping("/productCost")
-    BigDecimal productCost(@RequestBody @Valid OrderDto request) throws FeignException;
+    BigDecimal getProductCost(@RequestBody @Valid OrderDto request) throws FeignException;
 
     @PostMapping("/refund")
     void refundPayment(@RequestBody @NotNull UUID paymentId) throws FeignException;

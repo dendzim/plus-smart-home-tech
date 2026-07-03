@@ -2,6 +2,7 @@ package ru.yandex.practicum.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.yandex.practicum.payment.enums.PaymentState;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -24,5 +25,9 @@ public class Payment {
 
     private BigDecimal deliveryTotal;
 
-    private BigDecimal feeTotal;
+    private BigDecimal productTotal;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentState paymentState;
 }

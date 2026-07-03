@@ -25,13 +25,13 @@ public class PaymentController implements PaymentOperations {
     }
 
     @Override
-    public BigDecimal totalCost(OrderDto request) throws FeignException {
-        return service.totalCost(request);
+    public BigDecimal getTotalCost(OrderDto request) throws FeignException {
+        return service.getTotalCost(request);
     }
 
     @Override
-    public BigDecimal productCost(OrderDto request) throws FeignException {
-        return service.productCost(request);
+    public BigDecimal getProductCost(OrderDto request) throws FeignException {
+        return service.getProductCost(request);
     }
 
     @Override

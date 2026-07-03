@@ -8,6 +8,6 @@ public class NoOrderFoundException extends RuntimeException {
     }
 
     public NoOrderFoundException(UUID orderId) {
-        super("Order with id " + orderId + " not found");
+        super("Заказ с id " + orderId + " не найден");
     }
 }
