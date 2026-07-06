@@ -5,7 +5,7 @@ spring:
     ansi:
       enabled: ALWAYS
   datasource:
-    url: jdbc:postgresql://localhost:5432/delivery
+    url: jdbc:postgresql://localhost:5432/commerce_delivery
     username: postgres
     password: password
   jpa:

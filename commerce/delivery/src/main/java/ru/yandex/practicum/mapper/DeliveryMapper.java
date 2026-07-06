@@ -12,8 +12,5 @@ public interface DeliveryMapper {
     DeliveryDto toDeliveryDto(Delivery delivery);
 
     @Mapping(target = "deliveryId", ignore = true)
-    @Mapping(target = "deliveryWeight", ignore = true)
-    @Mapping(target = "deliveryVolume", ignore = true)
-    @Mapping(target = "fragile", ignore = true)
     Delivery toDelivery(DeliveryDto deliveryDto);
 }
