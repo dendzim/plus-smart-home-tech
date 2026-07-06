@@ -48,11 +48,11 @@ public class StorageController implements WarehouseOperations {
 
     @Override
     public BookedProductsDto assembly(AssemblyProductsForOrderRequest request) throws FeignException {
-        return null;
+        return service.assembly(request);
     }
 
     @Override
     public void returnProducts(Map<UUID, Integer> products) throws FeignException {
-
+        service.returnProducts(products);
     }
 }

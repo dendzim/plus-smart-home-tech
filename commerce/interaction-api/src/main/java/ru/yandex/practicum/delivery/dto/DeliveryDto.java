@@ -17,4 +17,5 @@ public class DeliveryDto {
     private AddressDto fromAddress;
     private AddressDto toAddress;
     private DeliveryState deliveryState;
+    private UUID orderId;
 }

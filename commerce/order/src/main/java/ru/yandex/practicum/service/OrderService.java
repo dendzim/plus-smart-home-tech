@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.cart.dto.ShoppingCartDto;
+import ru.yandex.practicum.delivery.dto.DeliveryDto;
+import ru.yandex.practicum.delivery.enums.DeliveryState;
 import ru.yandex.practicum.delivery.feignClient.DeliveryClient;
 import ru.yandex.practicum.exceptions.NoOrderFoundException;
 import ru.yandex.practicum.mapper.OrderMapper;
@@ -17,6 +19,7 @@ import ru.yandex.practicum.repository.OrderRepository;
 import ru.yandex.practicum.warehouse.dto.BookedProductsDto;
 import ru.yandex.practicum.warehouse.feignClient.WareHouseClient;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,6 +48,17 @@ public class OrderService {
         Order order = createOrder(request, booked);
         orderRepository.save(order);
 
+        DeliveryDto deliveryDto = DeliveryDto.builder()
+                .orderId(order.getOrderId())
+                .deliveryState(DeliveryState.CREATED)
+                .fromAddress(warehouseClient.getAddress())
+                .toAddress(request.getDeliveryAddress())
+                .build();
+        UUID deliveryId = deliveryClient.createDelivery(deliveryDto).getDeliveryId();
+
+        order.setDeliveryId(deliveryId);
+        orderRepository.save(order);
+
         return orderMapper.toOrderDto(order);
     }
 
@@ -52,6 +66,8 @@ public class OrderService {
         Order order = findOrderById(request.getOrderId());
         order.setState(OrderState.PRODUCT_RETURNED);
         orderRepository.save(order);
+
+        warehouseClient.returnProducts(request.getProducts());
         return orderMapper.toOrderDto(order);
     }
 
@@ -92,12 +108,22 @@ public class OrderService {
 
     public OrderDto calculateTotalOrder(UUID orderId) {
         Order order = findOrderById(orderId);
-        return null;
+        BigDecimal productPrice = paymentClient.getProductCost(orderMapper.toOrderDto(order));
+        BigDecimal total = paymentClient.getTotalCost(orderMapper.toOrderDto(order));
+
+        order.setProductPrice(productPrice);
+        order.setTotalPrice(total);
+
+        orderRepository.save(order);
+        return orderMapper.toOrderDto(order);
     }
 
     public OrderDto calculateDeliveryOrder(UUID orderId) {
         Order order = findOrderById(orderId);
-        return null;
+        BigDecimal deliveryPrice = deliveryClient.deliveryCost(orderMapper.toOrderDto(order));
+        order.setDeliveryPrice(deliveryPrice);
+        orderRepository.save(order);
+        return orderMapper.toOrderDto(order);
     }
 
     public OrderDto assemblyOrder(UUID orderId) {

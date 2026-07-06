@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.cart.dto.ShoppingCartDto;
 
 import ru.yandex.practicum.exceptions.NoSpecificProductInWarehouseException;
+import ru.yandex.practicum.exceptions.ProductInShoppingCartLowQuantityInWarehouse;
 import ru.yandex.practicum.exceptions.ValidationException;
 import ru.yandex.practicum.mapper.StorageMapper;
 import ru.yandex.practicum.model.OrderBooking;
@@ -106,5 +107,49 @@ public class StorageService {
 
         booking.setDeliveryId(request.getDeliveryId());
         bookingRepository.save(booking);
+    }
+
+    public BookedProductsDto assembly(AssemblyProductsForOrderRequest request) {
+        Map<UUID, Integer> products = request.getProducts();
+        boolean fragile = false;
+        double weight = 0;
+        double volume = 0;
+
+        Map<UUID, StorageProduct> warehouseProducts = storageRepository.findAllById(products.keySet()).stream()
+                .collect(Collectors.toMap(StorageProduct::getProductId, Function.identity()));
+
+        for (Map.Entry<UUID, Integer> cartProduct : products.entrySet()) {
+            StorageProduct warehouseProduct = warehouseProducts.get(cartProduct.getKey());
+            long newQuantity = warehouseProduct.getQuantity() - cartProduct.getValue();
+            if (newQuantity < 0) {
+                throw new ProductInShoppingCartLowQuantityInWarehouse("Недостаточно продуктов");
+            }
+            warehouseProduct.setQuantity(newQuantity);
+
+            weight += warehouseProduct.getWeight() * cartProduct.getValue();
+            volume += warehouseProduct.getHeight() * warehouseProduct.getWeight()
+                    * warehouseProduct.getDepth() * cartProduct.getValue();
+            fragile = fragile || warehouseProduct.getFragile();
+        }
+
+        storageRepository.saveAll(warehouseProducts.values());
+        OrderBooking orderBooking = new OrderBooking();
+        orderBooking.setOrderId(request.getOrderId());
+        orderBooking.setProducts(products);
+        bookingRepository.save(orderBooking);
+
+        return new BookedProductsDto(weight, volume, fragile);
+    }
+
+    public void returnProducts(Map<UUID, Integer> products) {
+        Map<UUID, StorageProduct> warehouseProducts = storageRepository.findAllById(products.keySet()).stream()
+                .collect(Collectors.toMap(StorageProduct::getProductId, Function.identity()));
+
+        for (Map.Entry<UUID, Integer> product : products.entrySet()) {
+            StorageProduct warehouseProduct = warehouseProducts.get(product.getKey());
+            warehouseProduct.setQuantity(warehouseProduct.getQuantity() + product.getValue());
+        }
+
+        storageRepository.saveAll(warehouseProducts.values());
     }
 }

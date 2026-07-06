@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.delivery.dto.DeliveryDto;
 import ru.yandex.practicum.delivery.enums.DeliveryState;
 import ru.yandex.practicum.exceptions.NoDeliveryFoundException;
-import ru.yandex.practicum.mapper.AddressMapper;
 import ru.yandex.practicum.mapper.DeliveryMapper;
 import ru.yandex.practicum.model.Delivery;
 import ru.yandex.practicum.order.dto.OrderDto;
@@ -25,7 +24,6 @@ public class DeliveryService {
 
     private final DeliveryRepository deliveryRepository;
     private final DeliveryMapper deliveryMapper;
-    private final AddressMapper addressMapper;
     private final OrderClient orderClient;
     private final WareHouseClient wareHouseClient;
 
