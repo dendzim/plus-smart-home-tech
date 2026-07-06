@@ -11,7 +11,7 @@ spring:
           searchLocations:
             - classpath:config/telemetry/{application}
             - classpath:config/commerce/{application}
-            - classpath:config/gateway/{application}
+            - classpath:config/config/{application}
 server:
   port: 8888
 
