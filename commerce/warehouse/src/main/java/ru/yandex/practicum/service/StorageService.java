@@ -8,12 +8,11 @@ import ru.yandex.practicum.cart.dto.ShoppingCartDto;
 import ru.yandex.practicum.exceptions.NoSpecificProductInWarehouseException;
 import ru.yandex.practicum.exceptions.ValidationException;
 import ru.yandex.practicum.mapper.StorageMapper;
+import ru.yandex.practicum.model.OrderBooking;
 import ru.yandex.practicum.model.StorageProduct;
+import ru.yandex.practicum.repository.BookingRepository;
 import ru.yandex.practicum.repository.StorageRepository;
-import ru.yandex.practicum.warehouse.dto.AddProductToWarehouseRequest;
-import ru.yandex.practicum.warehouse.dto.AddressDto;
-import ru.yandex.practicum.warehouse.dto.BookedProductsDto;
-import ru.yandex.practicum.warehouse.dto.NewProductInWarehouseRequest;
+import ru.yandex.practicum.warehouse.dto.*;
 
 import java.security.SecureRandom;
 import java.util.Map;
@@ -29,6 +28,7 @@ public class StorageService {
 
     private final StorageRepository storageRepository;
     private final StorageMapper storageMapper;
+    private final BookingRepository bookingRepository;
 
     private static final String[] ADDRESSES =
             new String[] {"ADDRESS_1", "ADDRESS_2"};
@@ -98,5 +98,13 @@ public class StorageService {
                 .house(CURRENT_ADDRESS)
                 .flat(CURRENT_ADDRESS)
                 .build();
+    }
+
+    public void shippedToDelivery(ShippedDeliveryRequest request) {
+        OrderBooking booking = bookingRepository.findById(request.getOrderId())
+                .orElseThrow(() -> new IllegalArgumentException("No booking found for order " + request.getOrderId()));
+
+        booking.setDeliveryId(request.getDeliveryId());
+        bookingRepository.save(booking);
     }
 }

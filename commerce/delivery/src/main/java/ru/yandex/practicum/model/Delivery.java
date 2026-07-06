@@ -28,4 +28,6 @@ public class Delivery {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DeliveryState deliveryState;
+
+    private UUID orderId;
 }

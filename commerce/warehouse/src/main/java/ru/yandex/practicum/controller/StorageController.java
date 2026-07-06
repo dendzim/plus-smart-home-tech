@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.cart.dto.ShoppingCartDto;
 import ru.yandex.practicum.service.StorageService;
 import ru.yandex.practicum.warehouse.WarehouseOperations;
-import ru.yandex.practicum.warehouse.dto.AddProductToWarehouseRequest;
-import ru.yandex.practicum.warehouse.dto.AddressDto;
-import ru.yandex.practicum.warehouse.dto.BookedProductsDto;
-import ru.yandex.practicum.warehouse.dto.NewProductInWarehouseRequest;
+import ru.yandex.practicum.warehouse.dto.*;
 import ru.yandex.practicum.warehouse.feignClient.WareHouseClient;
+
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/warehouse")
@@ -39,5 +39,20 @@ public class StorageController implements WarehouseOperations {
     @Override
     public AddressDto getAddress() {
         return service.getAddress();
+    }
+
+    @Override
+    public void shipped(ShippedDeliveryRequest request) throws FeignException {
+        service.shippedToDelivery(request);
+    }
+
+    @Override
+    public BookedProductsDto assembly(AssemblyProductsForOrderRequest request) throws FeignException {
+        return null;
+    }
+
+    @Override
+    public void returnProducts(Map<UUID, Integer> products) throws FeignException {
+
     }
 }
