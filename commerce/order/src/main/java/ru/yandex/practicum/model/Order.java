@@ -50,4 +50,6 @@ public class Order {
     private BigDecimal deliveryPrice;
 
     private BigDecimal productPrice;
+
+    private String username;
 }

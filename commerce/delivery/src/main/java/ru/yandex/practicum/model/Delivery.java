@@ -21,9 +21,14 @@ public class Delivery {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID deliveryId;
 
-    private AddressDto fromAddress;
+    @ManyToOne
+    @JoinColumn(name = "from_address_id")
+    private Address fromAddress;
 
-    private AddressDto toAddress;
+    @ManyToOne
+    @JoinColumn(name = "to_address_id")
+    private Address toAddress;
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

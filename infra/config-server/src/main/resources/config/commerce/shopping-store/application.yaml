@@ -12,6 +12,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
+      default_schema: store
   sql:
     init:
       mode: always
