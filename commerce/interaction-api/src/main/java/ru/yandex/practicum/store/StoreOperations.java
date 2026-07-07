@@ -1,6 +1,5 @@
 package ru.yandex.practicum.store;
 
-import feign.FeignException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
@@ -13,10 +12,10 @@ import java.util.UUID;
 
 public interface StoreOperations {
     @PutMapping
-    ProductDto addProduct(@RequestBody @Valid ProductDto productDto) throws FeignException;
+    ProductDto addProduct(@RequestBody @Valid ProductDto productDto);
 
     @GetMapping("/{productId}")
-    ProductDto getProduct(@PathVariable UUID productId) throws FeignException;
+    ProductDto getProduct(@PathVariable UUID productId);
 
     @GetMapping
     Page<ProductDto> getProductsByCategory(
@@ -26,12 +25,12 @@ public interface StoreOperations {
             @RequestParam(value = "sort", required = false) String sort);
 
     @PostMapping
-    ProductDto updateProduct(@RequestBody @Valid ProductDto productDto) throws FeignException;
+    ProductDto updateProduct(@RequestBody @Valid ProductDto productDto);
 
     @PostMapping("/quantityState")
     Boolean setQuantityState(@RequestParam UUID productId,
-                             @RequestParam QuantityState quantityState) throws FeignException;
+                             @RequestParam QuantityState quantityState);
 
     @PostMapping("/removeProductFromStore")
-    Boolean removeProductFromStore(@RequestBody @NotNull UUID productId) throws FeignException;
+    Boolean removeProductFromStore(@RequestBody @NotNull UUID productId);
 }

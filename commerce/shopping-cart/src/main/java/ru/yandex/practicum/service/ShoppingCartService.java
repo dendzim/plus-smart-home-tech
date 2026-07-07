@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.cart.dto.ChangeProductQuantityRequest;
 import ru.yandex.practicum.cart.dto.ShoppingCartDto;
-import ru.yandex.practicum.exception.NoProductsInShoppingCartException;
+import ru.yandex.practicum.exceptions.NoProductsInShoppingCartException;
 import ru.yandex.practicum.mapper.ShoppingCartMapper;
 import ru.yandex.practicum.model.ShoppingCart;
 import ru.yandex.practicum.repository.ShoppingCartRepository;

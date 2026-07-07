@@ -12,7 +12,8 @@ import java.util.UUID;
 public interface CartOperations {
 
     @PutMapping
-    ShoppingCartDto addProduct(@RequestParam @NotNull String username, @RequestBody Map<UUID, Integer> products);
+    ShoppingCartDto addProduct(@RequestParam @NotNull String username,
+                               @RequestBody Map<UUID, Integer> products);
 
     @GetMapping
     ShoppingCartDto getShoppingCart(@RequestParam @NotNull String username);

@@ -60,11 +60,11 @@ services:
       - |
         set -e
         psql postgresql://postgres:password@postgres:5432 -v ON_ERROR_STOP=1 <<-EOSQL
-        create database cart;
-        create database store;
-        create database warehouse;
-        create database order;
-        create database delivery;
-        create database payment;
+        create database commerce_cart;
+        create database commerce_store;
+        create database commerce_warehouse;
+        create database commerce_order;
+        create database commerce_delivery;
+        create database commerce_payment;
         EOSQL
 
