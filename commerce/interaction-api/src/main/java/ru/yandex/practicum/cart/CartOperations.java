@@ -1,6 +1,5 @@
 package ru.yandex.practicum.cart;
 
-import feign.FeignException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.cart.dto.ChangeProductQuantityRequest;
@@ -14,20 +13,20 @@ public interface CartOperations {
 
     @PutMapping
     ShoppingCartDto addProduct(@RequestParam @NotNull String username,
-                               @RequestBody Map<UUID, Integer> products) throws FeignException;
+                               @RequestBody Map<UUID, Integer> products);
 
     @GetMapping
-    ShoppingCartDto getShoppingCart(@RequestParam @NotNull String username) throws FeignException;
+    ShoppingCartDto getShoppingCart(@RequestParam @NotNull String username);
 
     @PostMapping("/change-quantity")
     ShoppingCartDto changeQuantity(@RequestParam @NotNull String username,
-                                   @RequestBody ChangeProductQuantityRequest request) throws FeignException;
+                                   @RequestBody ChangeProductQuantityRequest request);
 
     @DeleteMapping
-    void deactivateCart(@RequestParam @NotNull String username) throws FeignException;
+    void deactivateCart(@RequestParam @NotNull String username);
 
     @PostMapping("/remove")
     ShoppingCartDto removeProductsFromCart(@RequestParam @NotNull String username,
-                                           @RequestBody List<UUID> productsId) throws FeignException;
+                                           @RequestBody List<UUID> productsId);
 
 }

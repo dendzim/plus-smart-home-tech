@@ -1,6 +1,5 @@
 package ru.yandex.practicum.delivery;
 
-import feign.FeignException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,17 +14,17 @@ import java.util.UUID;
 public interface DeliveryOperations {
 
     @PutMapping
-    DeliveryDto createDelivery(@RequestBody @Valid DeliveryDto request) throws FeignException;
+    DeliveryDto createDelivery(@RequestBody @Valid DeliveryDto request);
 
     @PostMapping("/successful")
-    void deliverySuccessful(@RequestBody @NotNull UUID deliveryId) throws FeignException;
+    void deliverySuccessful(@RequestBody @NotNull UUID deliveryId);
 
     @PostMapping("/picked")
-    void deliveryPicked(@RequestBody @NotNull UUID deliveryId) throws FeignException;
+    void deliveryPicked(@RequestBody @NotNull UUID deliveryId);
 
     @PostMapping("/cost")
-    BigDecimal deliveryCost(@RequestBody @Valid OrderDto request) throws FeignException;
+    BigDecimal deliveryCost(@RequestBody @Valid OrderDto request);
 
     @PostMapping("/failed")
-    void failedDelivery(@RequestBody @NotNull UUID deliveryId) throws FeignException;
+    void failedDelivery(@RequestBody @NotNull UUID deliveryId);
 }

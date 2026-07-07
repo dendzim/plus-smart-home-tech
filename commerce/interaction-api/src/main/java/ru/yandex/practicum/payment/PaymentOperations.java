@@ -1,6 +1,5 @@
 package ru.yandex.practicum.payment;
 
-import feign.FeignException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,17 +13,17 @@ import java.util.UUID;
 public interface PaymentOperations {
 
     @PostMapping
-    PaymentDto createPayment(@RequestBody @Valid OrderDto request) throws FeignException;
+    PaymentDto createPayment(@RequestBody @Valid OrderDto request);
 
     @PostMapping("/totalCost")
-    BigDecimal getTotalCost(@RequestBody @Valid OrderDto request) throws FeignException;
+    BigDecimal getTotalCost(@RequestBody @Valid OrderDto request);
 
     @PostMapping("/productCost")
-    BigDecimal getProductCost(@RequestBody @Valid OrderDto request) throws FeignException;
+    BigDecimal getProductCost(@RequestBody @Valid OrderDto request);
 
     @PostMapping("/refund")
-    void refundPayment(@RequestBody @NotNull UUID paymentId) throws FeignException;
+    void refundPayment(@RequestBody @NotNull UUID paymentId);
 
     @PostMapping("/failed")
-    void failedPayment(@RequestBody @NotNull UUID paymentId) throws FeignException;
+    void failedPayment(@RequestBody @NotNull UUID paymentId);
 }

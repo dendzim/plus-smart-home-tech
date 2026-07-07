@@ -1,6 +1,5 @@
 package ru.yandex.practicum.warehouse;
 
-import feign.FeignException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,23 +15,23 @@ import java.util.UUID;
 public interface WarehouseOperations {
 
     @PutMapping
-    void addNewProduct(@RequestBody @Valid NewProductInWarehouseRequest request) throws FeignException;
+    void addNewProduct(@RequestBody @Valid NewProductInWarehouseRequest request);
 
     @PostMapping("/check")
-    BookedProductsDto checkQuantity(@RequestBody @Valid ShoppingCartDto shoppingCartDto) throws FeignException;
+    BookedProductsDto checkQuantity(@RequestBody @Valid ShoppingCartDto shoppingCartDto);
 
     @PostMapping("/add")
-    void addProduct(@RequestBody @Valid AddProductToWarehouseRequest request) throws FeignException;
+    void addProduct(@RequestBody @Valid AddProductToWarehouseRequest request);
 
     @GetMapping("/address")
-    AddressDto getAddress() throws FeignException;
+    AddressDto getAddress();
 
     @PostMapping("/shipped")
-    void shipped(@RequestBody @Valid ShippedDeliveryRequest request) throws  FeignException;
+    void shipped(@RequestBody @Valid ShippedDeliveryRequest request);
 
     @PostMapping("/assembly")
-    BookedProductsDto assembly(@RequestBody @Valid AssemblyProductsForOrderRequest request) throws  FeignException;
+    BookedProductsDto assembly(@RequestBody @Valid AssemblyProductsForOrderRequest request);
 
     @PostMapping("/return")
-    void returnProducts(@RequestBody @NotNull Map<UUID, Integer> products) throws  FeignException;
+    void returnProducts(@RequestBody @NotNull Map<UUID, Integer> products);
 }
